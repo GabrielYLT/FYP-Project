@@ -1,0 +1,111 @@
+body,html{
+	height:100%;
+}
+
+
+.bgc{
+
+background-image:url("img_login/background.jpeg");
+background-repeat:no-repeat;
+background-size:cover;
+background-position: center;
+height:100%;
+   filter: blur(3px);
+  -webkit-filter: blur(3px);
+}
+
+#login-title{
+	height:40px;
+	background-repeat:no-repeat;
+	border-radius:8px 8px 8px 8px;
+}
+h4{
+	color:Black;
+	font-family:Arial;
+	font-weight:bold;
+	font-size:20pt;
+	text-align:center;
+	padding:12px 40px;
+}
+#loginform
+{
+	padding:10px;
+	text-align:center;
+}
+#loginform input[type=email],[type=password]
+{
+	width:250px;
+	height:30px;
+	border:1px solid #DDD;
+	border-radius:5px;
+	padding: 5px 10px 5px 40px;
+}
+#loginform input[type=email]
+{
+	background-image:url(img_login/email.png);
+	background-position:10px 10px;
+	background-repeat:no-repeat;
+}
+#loginform input[type=password]
+{
+	background-image:url(img_login/key.png);
+	background-repeat:no-repeat;
+	background-position:10px 10px;
+
+}
+#loginform input[type=submit]
+{
+
+	background-color:Blue;
+	color:white;
+	font-weight:bold;
+	width:300px;
+	padding:10px;
+	border:0px;
+}
+#loginform input[type=submit]:hover
+{
+
+	background-color:#2C61B7;
+	color:white;
+	font-weight:bold;
+	width:300px;
+	padding:10px;
+	border:0px;
+	cursor:pointer;
+}
+#loginform p a:link a:visited{
+	color:white;
+	text-decoration:none;
+	font-family:"Arial";
+	font-size:0.8em;
+	text-align:center;
+}
+#loginform p a:hover{
+	font-style:italic;
+	color:black;
+}
+#outsideform
+{
+	//background-color:#FDFEFE;
+	//padding: 15px;
+	//width: 500px;
+	//align:center;
+	//margin-top:150px;
+	//margin-left:380px;
+	//border-radius:20px 20px 20px 20px;
+  //background-color: rgb(0,0,0); /* Fallback color */
+  //background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+  color: white;
+  font-weight: bold;
+  //border: 3px solid #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  text-align: center;
+
+}
