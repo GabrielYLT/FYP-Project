@@ -1,65 +1,25 @@
 <?php
 include("dataconnection.php");
 session_start();
+error_reporting(0);
+?>
+<?php
 if(isset($_SESSION["id"]))
 {
-	$cus_id=$_GET['id'];
-	$result=mysqli_query($connect,"SELECT * from customer WHERE ID='$cus_id'");
 
-	$row=mysqli_fetch_assoc($result);
+	echo "";
+
 }
 ?>
 <?php
-    $msg ="";
-    if(isset($_POST['upload']))
-    {
-        $image = $_FILES['image']['name'];
-  
-        mysqli_query($connect,"UPDATE customer SET ProfileIMG='$image'
-                                                    WHERE ID = '$cus_id'");
-
-        $target ="images/".basename($_FILES['image']['name']);
-        if(move_uploaded_file($_FILES['image']['tmp_name'],$target))
-        {
-          $msg = "upload successfully";
-        }
-        else{
-          $msg = "problem occur.";
-        }
-
-        header("refresh:0.1");
-    }
-?>
-<?php
-if(isset($_POST["savebtn"]))
-{
-	$uname = $_POST["username"];
-    $uemail = $_POST["useremail"];
-    $uaddress = $_POST["useraddress"];
-    $uposcode = $_POST["userposcode"];
-    $ustate = $_POST["userstate"];
-    $utel = $_POST["usertel"];
-    $ubirth = $_POST["userbirthday"];
-    
-    
-    mysqli_query($connect,"UPDATE customer SET Username ='$uname',
-                                               Email='$uemail',
-                                               PhoneNumber = '$utel',
-                                               Birthday = '$ubirth',
-                                               User_Address = '$uaddress',
-                                               User_State = '$ustate',
-                                               User_Poscode = '$uposcode'
-                                               WHERE ID = '$cus_id'");
-     
-    header("location:profile.php");
-
-}
-mysqli_close($connect);
+$customer_id = $_SESSION['id'];
+$result = mysqli_query($connect,"SELECT * FROM customer WHERE ID='$customer_id'");
+$row = mysqli_fetch_assoc($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Edit Profile</title>
+    <title>Description</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -111,7 +71,9 @@ mysqli_close($connect);
                 }
                 else 
                 {
-                    echo "";
+					
+                    echo "Please Login before Purchasing!!";
+					
                 }
                 ?>
                 </span>
@@ -127,28 +89,52 @@ mysqli_close($connect);
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="main.php">JJG Fruits & Vege</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span>Menu
-	      </button>
+	      
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
+            <?php
+                if(!isset($_SESSION['id']))
+                {
+            ?>  
+                <li class="nav-item"><a href="login.php" class="nav-link">Login</a></li>
+                <li class="nav-item"><a href="signup.php" class="nav-link">Register</a></li>
+                <?php
+                }
+                else 
+                {
+					
+                    echo"";
+					
+                }
+                ?>
 	          <li class="nav-item"><a href="main.php" class="nav-link">Home</a></li>
 	          <li class="nav-item active dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
               	
                 <a class="dropdown-item" href="product.php">Product</a>
-                <a class="dropdown-item" href="cart.php">Cart</a>
+               
                 
               </div>
             </li>
+	          
               <li class="nav-item active dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $row["Username"] ?></a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
               	<a class="dropdown-item" href="profile.php">Profile</a>
-              	<a class="dropdown-item" href="logout.php">Logout</a>
-               
+				  <?php
+                if(isset($_SESSION['id']))
+                {
+            	?>  
+				<a class="dropdown-item" href="logout.php">Logout</a>
+                <?php
+                }
+                else 
+                {
+					echo "";
+                }
+                ?>
                 <a class="dropdown-item" href="cart.php">Cart</a>
                 
               </div>
@@ -160,84 +146,33 @@ mysqli_close($connect);
 	    </div>
 	  </nav>
     <!-- END nav -->
-
     <div class="hero-wrap hero-bread" style="background-image: url('index/images/bg_1.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span> <span class="mr-2"><a href="profile.php"><span>Profile Page</span></span></a></p>
-            <h1 class="mb-0 bread">Edit Profile Page</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span></p>
+            <h1 class="mb-0 bread">Description</h1>
           </div>
         </div>
       </div>
     </div>
-    <body>
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class=col-md-3 border-right>
-            <form name="profile" method="POST" enctype="multipart/form-data">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px"><?php echo "<img src='images/" .$row['ProfileIMG']."'>"?>
-                
-            <h5>Profile Picture</h5>   
-            <div style="width:150px";><input type="file" name="image" id="image"> </div>
-            <button class="button-58" type="submit" name="upload" style="margin-top:50px">Save Profile Image</button>
-            </div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 p-5">
-                <div class="d-flex justify-content-between  align-items-center mb-3">
-                    <h4 class="text-right">My Profile</h4>
-                </div>
-                <div class="row mt-2" style="padding-left:15px;">
-                    <div class="col-md-12">
-                        <label class="labels">Name:</label>
-                        <input type="text" name="username" class="form-control" placeholder="Enter your name" value="<?php echo "".$row['Username'];?>">
-                    </div>
-                </div>
-                <div class="row-mt-3" style="width:360px;"> 
-                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="example@gmail.com" value="<?php echo $row['Email'];?>"readonly></div>
-                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" name="useraddress" class="form-control" placeholder="Enter Address 1" value="<?php echo $row["User_Address"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" name="userposcode" class="form-control" placeholder="Postcode" value="<?php echo $row["User_Poscode"];?>"></div>
-                    <div class="col-md-12"><label class="labels">State</label>
-                    <select class="col-md-12 form-control" name="userstate" onchange="getOption()">
-                      <option value="Kuala Lumpur">Kuala Lumpur</option>
-                      <option value="Selangor">Selangor</option>
-                      <option value="Melaka">Melaka</option>
-                      <option value="Negeri Sembilan">Negeri Sembilan</option>
-                      <option value="Pahang">Pahang</option>
-                      <option value="Kelantan">Kelatan</option>
-                      <option value="Terrenganu">Terrenganu</option>
-                      <option value="Penang">Penang</option>
-                      <option value="Perlis">Perlis</option>
-                      <option value="Kedah">Kedah</option>
-                      <option value="Johor">Johor</option>
-                      <option value="Perak">Perak</option>
-                      <option value="Sabah">Sabah</option>
-                      <option value="Sarawak">Sarawak</option>
-                    </select>
-                    </div>    
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" name="usertel" class="form-control" placeholder="Enter your Phone Number" value="<?php echo $row["PhoneNumber"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Birthday</label><input type="date" name="userbirthday" class="form-control" placeholder="Birthday" value="<?php echo $row["Birthday"];?>"></div> 
-                </div>
-                    
-                <div>
-                <div class="mt-5 text-center"><button class="button-58" type="submit" name="savebtn">Save Changes</button></div>
-                <div class="mt-5 text-center"><a class="button-58" href="profile.php">Back</a></div>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-4">  
-        </div>
-        </form>
-    </div>
+    <h4 style="font-weight:bold; margin-top:10px;">Vegetable</h4>
+    <span><p>Vegetable,in the broadest sense, any kind of plant life or plant product, namely “vegetable matter”; in common, narrow usage, the term vegetable usually refers to the fresh edible portions of certain herbaceous plants—roots, stems, leaves, flowers, fruit, or seeds. These plant parts are either eaten fresh or prepared in a number of ways, usually as a savory, rather than sweet, dish.</p></span>
     
-</div>
+    <img src="images/des.jpeg" style="width:1000px;">
+   <h3 style="font-weight:bold; margin-top:50px;">Nutrition Value of Vegetable</h3>
+   <span><p>Most vegetables are low in calories and have a water content of over 70 percent, with only about 3.5 percent protein and less than 1 percent fat. Vegetables are good sources of minerals, especially calcium and iron, and vitamins, principally A and C. Nearly all vegetables are rich in dietary fiber and antioxidants.</p></span>
+   <img src="images/nutri.png">
 
-
-    
+   <h4 style="font-weight:bold; margin-top:50px;">Fruits</h4>
+   <span><p>Any fruit or 100% fruit juice counts as part of the Fruit Group. Fruits may be fresh, frozen, canned, or dried/dehydrated, and may be whole, cut-up, pureed, or cooked. At least half of the recommended amount of fruit should come from whole fruit, rather than 100% fruit juice.</p></span>
+   <img src="images/fruit.jpeg" style="width:1000px;">
+   <h3 style="font-weight:bold; margin-top:50px;">Nutrition Value of Fruits</h3>
+   <span><p>Fruit is a fabulous food. It’s nutrient-rich, it’s convenient, and it can be relatively inexpensive. Fresh fruit is portable, and if it is whole, it usually requires no refrigeration. Most fruit is naturally low in fat, sodium, and calories and a source of many essential nutrients such as potassium, vitamins A and C, folate, and dietary fiber. The United States Department of Agriculture (USDA) recommends adults consume a minimum of 2–4 servings of fruit per day, mostly whole fruit.
+Eating fruit not only provides nutrients vital for health and maintenance of your body. Research suggests fruit may help reduce the risk of diabetes, obesity, stroke, heart disease, and cancer. Diets rich in foods containing fiber (like most fruits) may reduce the risk of heart disease, obesity, and Type 2 diabetes, and eating fruits rich in potassium may lower blood pressure. Research also shows that because fruits are lower in calories per cup than other foods, they may be useful in helping to lower total calorie intake.</p></span>
+<img src="images/fnutri.png" style="width:1000px;">
 </div>
-    <footer class="ftco-footer ftco-section">
+<footer class="ftco-footer ftco-section" style="margin-top:100px;">
       <div class="container">
       	<div class="row">
       		<div class="mouse">
@@ -252,7 +187,7 @@ mysqli_close($connect);
               <h2 class="ftco-heading-2">Vegefoods</h2>
               <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate"><a href="https://twitter.com/?lang=en"><span class="icon-twitter"></span></a></li>
+			  <li class="ftco-animate"><a href="https://twitter.com/?lang=en"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="https://www.facebook.com/"><span class="icon-facebook"></span></a></li>
                 <li class="ftco-animate"><a href="https://www.instagram.com/"><span class="icon-instagram"></span></a></li>
               </ul>
@@ -333,21 +268,7 @@ mysqli_close($connect);
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="index/js/google-map.js"></script>
   <script src="index/js/main.js"></script>
-  <script>
-		$(document).ready(function() {
-    // On refresh check if there are values selected
-    if (localStorage.selectVal) {
-            // Select the value stored
-        $('select').val( localStorage.selectVal );
-    }
-});
 
-// On change store the value
-$('select').on('change', function(){
-    var currentVal = $(this).val();
-    localStorage.setItem('selectVal', currentVal );
-});
-	</script>
     
   </body>
 </html>

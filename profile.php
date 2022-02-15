@@ -1,65 +1,25 @@
 <?php
 include("dataconnection.php");
 session_start();
-if(isset($_SESSION["id"]))
+
+if(!isset($_SESSION['id']))
 {
-	$cus_id=$_GET['id'];
-	$result=mysqli_query($connect,"SELECT * from customer WHERE ID='$cus_id'");
-
-	$row=mysqli_fetch_assoc($result);
-}
 ?>
-<?php
-    $msg ="";
-    if(isset($_POST['upload']))
-    {
-        $image = $_FILES['image']['name'];
-  
-        mysqli_query($connect,"UPDATE customer SET ProfileIMG='$image'
-                                                    WHERE ID = '$cus_id'");
-
-        $target ="images/".basename($_FILES['image']['name']);
-        if(move_uploaded_file($_FILES['image']['tmp_name'],$target))
-        {
-          $msg = "upload successfully";
-        }
-        else{
-          $msg = "problem occur.";
-        }
-
-        header("refresh:0.1");
-    }
-?>
-<?php
-if(isset($_POST["savebtn"]))
-{
-	$uname = $_POST["username"];
-    $uemail = $_POST["useremail"];
-    $uaddress = $_POST["useraddress"];
-    $uposcode = $_POST["userposcode"];
-    $ustate = $_POST["userstate"];
-    $utel = $_POST["usertel"];
-    $ubirth = $_POST["userbirthday"];
-    
-    
-    mysqli_query($connect,"UPDATE customer SET Username ='$uname',
-                                               Email='$uemail',
-                                               PhoneNumber = '$utel',
-                                               Birthday = '$ubirth',
-                                               User_Address = '$uaddress',
-                                               User_State = '$ustate',
-                                               User_Poscode = '$uposcode'
-                                               WHERE ID = '$cus_id'");
-     
-    header("location:profile.php");
-
+    <script>
+    alert("Please login. Thank you!!!");
+    </script>
+    <?php
+    header("refresh:0.001;url=login.php");
+    //exit();
 }
-mysqli_close($connect);
+$customer_id=$_SESSION['id'];
+$result=mysqli_query($connect,"SELECT *FROM customer WHERE ID='$customer_id'");
+$row = mysqli_fetch_assoc($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Edit Profile</title>
+    <title>Profile Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -137,9 +97,8 @@ mysqli_close($connect);
 	          <li class="nav-item active dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	
                 <a class="dropdown-item" href="product.php">Product</a>
-                <a class="dropdown-item" href="cart.php">Cart</a>
+               
                 
               </div>
             </li>
@@ -161,26 +120,24 @@ mysqli_close($connect);
 	  </nav>
     <!-- END nav -->
 
-    <div class="hero-wrap hero-bread" style="background-image: url('index/images/bg_1.jpg');">
+  <div class="hero-wrap hero-bread" style="background-image: url('index/images/bg_1.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span> <span class="mr-2"><a href="profile.php"><span>Profile Page</span></span></a></p>
-            <h1 class="mb-0 bread">Edit Profile Page</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span> <span class="mr-2"><a href="profile.php">Profile Page</a></span></p>
+            <h1 class="mb-0 bread">Profile Page</h1>
           </div>
         </div>
       </div>
     </div>
-    <body>
-<div class="container rounded bg-white mt-5 mb-5">
+    <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class=col-md-3 border-right>
-            <form name="profile" method="POST" enctype="multipart/form-data">
+            <form name="profile" method="post">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px"><?php echo "<img src='images/" .$row['ProfileIMG']."'>"?>
-                
-            <h5>Profile Picture</h5>   
-            <div style="width:150px";><input type="file" name="image" id="image"> </div>
-            <button class="button-58" type="submit" name="upload" style="margin-top:50px">Save Profile Image</button>
+                <span class="font-weight-bold"> <?php echo "<br>".$row["Username"];?>         </span>
+                <span class="text-black-50"> <?php echo "<br>".$row["Email"];?>      </span>
+                <span></span> 
             </div>
         </div>
         <div class="col-md-5 border-right">
@@ -188,56 +145,43 @@ mysqli_close($connect);
                 <div class="d-flex justify-content-between  align-items-center mb-3">
                     <h4 class="text-right">My Profile</h4>
                 </div>
+                
                 <div class="row mt-2" style="padding-left:15px;">
-                    <div class="col-md-12">
-                        <label class="labels">Name:</label>
-                        <input type="text" name="username" class="form-control" placeholder="Enter your name" value="<?php echo "".$row['Username'];?>">
+                    <div class="col-md-12"><label class="labels">Name:</label><input type="text" name="username" class="form-control" placeholder="" value="<?php echo "".$row["Username"]?>"; disabled>
                     </div>
                 </div>
-                <div class="row-mt-3" style="width:360px;"> 
-                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="example@gmail.com" value="<?php echo $row['Email'];?>"readonly></div>
-                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" name="useraddress" class="form-control" placeholder="Enter Address 1" value="<?php echo $row["User_Address"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" name="userposcode" class="form-control" placeholder="Postcode" value="<?php echo $row["User_Poscode"];?>"></div>
-                    <div class="col-md-12"><label class="labels">State</label>
-                    <select class="col-md-12 form-control" name="userstate" onchange="getOption()">
-                      <option value="Kuala Lumpur">Kuala Lumpur</option>
-                      <option value="Selangor">Selangor</option>
-                      <option value="Melaka">Melaka</option>
-                      <option value="Negeri Sembilan">Negeri Sembilan</option>
-                      <option value="Pahang">Pahang</option>
-                      <option value="Kelantan">Kelatan</option>
-                      <option value="Terrenganu">Terrenganu</option>
-                      <option value="Penang">Penang</option>
-                      <option value="Perlis">Perlis</option>
-                      <option value="Kedah">Kedah</option>
-                      <option value="Johor">Johor</option>
-                      <option value="Perak">Perak</option>
-                      <option value="Sabah">Sabah</option>
-                      <option value="Sarawak">Sarawak</option>
-                    </select>
-                    </div>    
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" name="usertel" class="form-control" placeholder="Enter your Phone Number" value="<?php echo $row["PhoneNumber"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Birthday</label><input type="date" name="userbirthday" class="form-control" placeholder="Birthday" value="<?php echo $row["Birthday"];?>"></div> 
+                <div class="row-mt-2" style="width:360px;">
+                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="" value="<?php echo $row["Email"];?>" disabled></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" name="useraddress" class="form-control" placeholder="" value="<?php echo $row["User_Address"];?>"disabled ></div>
+                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" name="userposcode" class="form-control" placeholder="" value="<?php echo  $row["User_Poscode"];?>" disabled></div>
+                    <div class="col-md-12"><label class="labels">State</label><input type="text" name="userstate" class="form-control" placeholder="" value="<?php echo $row["User_State"];?>" disabled></div>
+                    
+                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" name="usertel" class="form-control" placeholder="" value="<?php echo $row["PhoneNumber"];?>" disabled></div>
+                    <div class="col-md-12"><label class="labels">Birthday</label><input type="date" name="userbirthday" class="form-control" placeholder="" value="<?php echo $row["Birthday"];?>" disabled></div> 
                 </div>
                     
                 <div>
-                <div class="mt-5 text-center"><button class="button-58" type="submit" name="savebtn">Save Changes</button></div>
-                <div class="mt-5 text-center"><a class="button-58" href="profile.php">Back</a></div>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-4">  
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience"><span class="border px-3 p-1 add-experience"> <a href="edit_profile.php?id=<?php echo $row['ID'];?>"><i class="fa fa-plus"></i>&nbsp;Edit Profile</a></span></div><br>
+                <p style="color:red;">IF you want to changes your profile information, pls click the above button to make changes.</p>
+              </div>
         </div>
         </form>
     </div>
+
+
     
 </div>
 
 
     
 </div>
-    <footer class="ftco-footer ftco-section">
+<footer class="ftco-footer ftco-section">
       <div class="container">
       	<div class="row">
       		<div class="mouse">
@@ -310,7 +254,6 @@ mysqli_close($connect);
         </div>
       </div>
     </footer>
-    
   
 
   <!-- loader -->
@@ -333,21 +276,7 @@ mysqli_close($connect);
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="index/js/google-map.js"></script>
   <script src="index/js/main.js"></script>
-  <script>
-		$(document).ready(function() {
-    // On refresh check if there are values selected
-    if (localStorage.selectVal) {
-            // Select the value stored
-        $('select').val( localStorage.selectVal );
-    }
-});
 
-// On change store the value
-$('select').on('change', function(){
-    var currentVal = $(this).val();
-    localStorage.setItem('selectVal', currentVal );
-});
-	</script>
     
   </body>
 </html>

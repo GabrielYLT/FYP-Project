@@ -1,3 +1,4 @@
+//Edit Profile
 <?php
 include("dataconnection.php");
 session_start();
@@ -99,7 +100,7 @@ mysqli_close($connect);
 		    		<div class="row d-flex">
 		    			<div class="col-md pr-4 d-flex topper align-items-center">
 					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-phone2"></span></div>
-						    <span class="text">+60 03-5454 6464</span>
+						    <span class="text">+ 1235 2355 98</span>
 					    </div>
 					    <div class="col-md pr-4 d-flex topper align-items-center">
 					    	<div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
@@ -126,34 +127,28 @@ mysqli_close($connect);
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="main.php">JJG Fruits & Vege</a>
+	      <a class="navbar-brand" href="index/main.php">JJG Fruits & Vege</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="oi oi-menu"></span>Menu
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="main.php" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="index/main.php" class="nav-link">Home</a></li>
 	          <li class="nav-item active dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	
-                <a class="dropdown-item" href="product.php">Product</a>
-                <a class="dropdown-item" href="cart.php">Cart</a>
-                
+              	<a class="dropdown-item" href="shop.html">Shop</a>
+              	<a class="dropdown-item" href="wishlist.html">Wishlist</a>
+                <a class="dropdown-item" href="product-single.html">Single Product</a>
+                <a class="dropdown-item" href="cart.html">Cart</a>
+                <a class="dropdown-item" href="checkout.html">Checkout</a>
               </div>
             </li>
-              <li class="nav-item active dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $row["Username"] ?></a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="profile.php">Profile</a>
-              	<a class="dropdown-item" href="logout.php">Logout</a>
-               
-                <a class="dropdown-item" href="cart.php">Cart</a>
-                
-              </div>
-            </li>
-	          <li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
+	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
 	        </ul>
 	      </div>
@@ -165,7 +160,7 @@ mysqli_close($connect);
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span> <span class="mr-2"><a href="profile.php"><span>Profile Page</span></span></a></p>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index/main.php">Home</a></span> <span class="mr-2"><a href=""></a></span> <span>Edit Profile Page</span></p>
             <h1 class="mb-0 bread">Edit Profile Page</h1>
           </div>
         </div>
@@ -188,14 +183,14 @@ mysqli_close($connect);
                 <div class="d-flex justify-content-between  align-items-center mb-3">
                     <h4 class="text-right">My Profile</h4>
                 </div>
-                <div class="row mt-2" style="padding-left:15px;">
+                <div class="row mt-2">
                     <div class="col-md-12">
                         <label class="labels">Name:</label>
                         <input type="text" name="username" class="form-control" placeholder="Enter your name" value="<?php echo "".$row['Username'];?>">
                     </div>
                 </div>
-                <div class="row-mt-3" style="width:360px;"> 
-                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="example@gmail.com" value="<?php echo $row['Email'];?>"readonly></div>
+                <div class="row-mt-3">
+                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="example@gmail.com" value="<?php echo $row['Email'];?>"></div>
                     <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" name="useraddress" class="form-control" placeholder="Enter Address 1" value="<?php echo $row["User_Address"];?>"></div>
                     <div class="col-md-12"><label class="labels">Postcode</label><input type="text" name="userposcode" class="form-control" placeholder="Postcode" value="<?php echo $row["User_Poscode"];?>"></div>
                     <div class="col-md-12"><label class="labels">State</label>
@@ -215,7 +210,7 @@ mysqli_close($connect);
                       <option value="Sabah">Sabah</option>
                       <option value="Sarawak">Sarawak</option>
                     </select>
-                    </div>    
+                    </div>      
                     <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" name="usertel" class="form-control" placeholder="Enter your Phone Number" value="<?php echo $row["PhoneNumber"];?>"></div>
                     <div class="col-md-12"><label class="labels">Birthday</label><input type="date" name="userbirthday" class="form-control" placeholder="Birthday" value="<?php echo $row["Birthday"];?>"></div> 
                 </div>
@@ -252,9 +247,9 @@ mysqli_close($connect);
               <h2 class="ftco-heading-2">Vegefoods</h2>
               <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate"><a href="https://twitter.com/?lang=en"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="https://www.facebook.com/"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="https://www.instagram.com/"><span class="icon-instagram"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
               </ul>
             </div>
           </div>
@@ -291,9 +286,9 @@ mysqli_close($connect);
             	<h2 class="ftco-heading-2">Have a Questions?</h2>
             	<div class="block-23 mb-3">
 	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">Jalan Ayer Keroh Lama, 75450 Bukit Beruang, Melaka</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+60 03-5454 6464</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">jjgfruit@gmail.com</span></a></li>
+	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
 	              </ul>
 	            </div>
             </div>
@@ -333,6 +328,7 @@ mysqli_close($connect);
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="index/js/google-map.js"></script>
   <script src="index/js/main.js"></script>
+
   <script>
 		$(document).ready(function() {
     // On refresh check if there are values selected

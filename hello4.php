@@ -1,65 +1,90 @@
+//update quantity of the cart.php
 <?php
 include("dataconnection.php");
 session_start();
-if(isset($_SESSION["id"]))
-{
-	$cus_id=$_GET['id'];
-	$result=mysqli_query($connect,"SELECT * from customer WHERE ID='$cus_id'");
 
-	$row=mysqli_fetch_assoc($result);
+if(!isset($_SESSION['id']))
+{
+?>
+    <script>
+    alert("Please login. Thank you!!!");
+    </script>
+    <?php
+    header("refresh:0.001;url=login.php");
+    //exit();
 }
+$customer_id=$_SESSION['id'];
+$result=mysqli_query($connect,"SELECT *FROM customer WHERE ID='$customer_id'");
+$row = mysqli_fetch_assoc($result);
 ?>
 <?php
-    $msg ="";
-    if(isset($_POST['upload']))
+if(isset($_POST["add_to_cart"]))
+{
+
+    if(isset($_SESSION["shopping_cart"]))
     {
-        $image = $_FILES['image']['name'];
-  
-        mysqli_query($connect,"UPDATE customer SET ProfileIMG='$image'
-                                                    WHERE ID = '$cus_id'");
 
-        $target ="images/".basename($_FILES['image']['name']);
-        if(move_uploaded_file($_FILES['image']['tmp_name'],$target))
+        $item_array_id = array_column($_SESSION["shopping_cart"],"item_id");
+        if(!in_array($_GET["id"],$item_array_id))
         {
-          $msg = "upload successfully";
+            $count = count($_SESSION["shopping_cart"]);
+            $item_array = array(
+              'item_id' => $_GET["id"],
+              'item_image'=>$_POST["hidden_image"],
+              'item_name' => $_POST["hidden_name"],
+              'item_price' => $_POST["hidden_price"],
+              'item_quantity' =>$_POST["quantity"]
+            );
+            $_SESSION["shopping_cart"][$count] = $item_array;
         }
-        else{
-          $msg = "problem occur.";
+        else 
+        {
+          echo '<script>alert("Item already added")</script>';
+          //echo '<script>window.location="cart.php"</script>';
         }
 
-        header("refresh:0.1");
     }
-?>
-<?php
-if(isset($_POST["savebtn"]))
-{
-	$uname = $_POST["username"];
-    $uemail = $_POST["useremail"];
-    $uaddress = $_POST["useraddress"];
-    $uposcode = $_POST["userposcode"];
-    $ustate = $_POST["userstate"];
-    $utel = $_POST["usertel"];
-    $ubirth = $_POST["userbirthday"];
-    
-    
-    mysqli_query($connect,"UPDATE customer SET Username ='$uname',
-                                               Email='$uemail',
-                                               PhoneNumber = '$utel',
-                                               Birthday = '$ubirth',
-                                               User_Address = '$uaddress',
-                                               User_State = '$ustate',
-                                               User_Poscode = '$uposcode'
-                                               WHERE ID = '$cus_id'");
-     
-    header("location:profile.php");
+    else 
+    {
+        $item_array = array(
+          'item_id' => $_GET["id"],
+          'item_image'=>$_POST["hidden_image"],
+          'item_name' => $_POST["hidden_name"],
+          'item_price' => $_POST["hidden_price"],
+          'item_quantity' =>$_POST["quantity"]
+        );
+        $_SESSION["shopping_cart"][0] = $item_array;
+      
+
+
+    }
+
+
 
 }
-mysqli_close($connect);
+
+if(isset($_GET["action"]))
+{
+  if($_GET["action"] == "delete")
+  {
+      foreach($_SESSION["shopping_cart"] as $keys => $values)
+      {
+        if($values["item_id"]==$_GET["id"])
+        {
+            unset($_SESSION["shopping_cart"][$keys]);
+            echo'<script>alert("item removed")</script>';
+            echo'<script>window.location="product.php"</script>';
+        }
+      }
+  }
+
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Edit Profile</title>
+    <title>Cart Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -137,10 +162,7 @@ mysqli_close($connect);
 	          <li class="nav-item active dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
               <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	
                 <a class="dropdown-item" href="product.php">Product</a>
-                <a class="dropdown-item" href="cart.php">Cart</a>
-                
               </div>
             </li>
               <li class="nav-item active dropdown">
@@ -148,9 +170,7 @@ mysqli_close($connect);
               <div class="dropdown-menu" aria-labelledby="dropdown04">
               	<a class="dropdown-item" href="profile.php">Profile</a>
               	<a class="dropdown-item" href="logout.php">Logout</a>
-               
                 <a class="dropdown-item" href="cart.php">Cart</a>
-                
               </div>
             </li>
 	          <li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span></a></li>
@@ -160,84 +180,158 @@ mysqli_close($connect);
 	    </div>
 	  </nav>
     <!-- END nav -->
-
-    <div class="hero-wrap hero-bread" style="background-image: url('index/images/bg_1.jpg');">
+<div class="hero-wrap hero-bread" style="background-image: url('index/images/bg_1.jpg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="main.php">Home</a></span> <span class="mr-2"><a href="profile.php"><span>Profile Page</span></span></a></p>
-            <h1 class="mb-0 bread">Edit Profile Page</h1>
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
+            <h1 class="mb-0 bread">My Cart</h1>
           </div>
         </div>
       </div>
     </div>
-    <body>
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class=col-md-3 border-right>
-            <form name="profile" method="POST" enctype="multipart/form-data">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px"><?php echo "<img src='images/" .$row['ProfileIMG']."'>"?>
+
+    <section class="ftco-section ftco-cart">
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        
+						        <th>Product name</th>
+                    <th></th>
+						        <th>Quantity</th>
+						        <th>Price</th>
+                    <th>Total</th>
+						        <th>Action</th>
+                    <th>&nbsp;</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+            <?php
+             $total=0;
+            if(!empty($_SESSION["shopping_cart"]))
+            {
+              
+             
+              foreach($_SESSION["shopping_cart"] as $keys =>$values)
+              {
+                $sr=$keys+1;
+                $total = $total+$values['item_price'];
+                echo"
+              <tr>
                 
-            <h5>Profile Picture</h5>   
-            <div style="width:150px";><input type="file" name="image" id="image"> </div>
-            <button class="button-58" type="submit" name="upload" style="margin-top:50px">Save Profile Image</button>
-            </div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 p-5">
-                <div class="d-flex justify-content-between  align-items-center mb-3">
-                    <h4 class="text-right">My Profile</h4>
-                </div>
-                <div class="row mt-2" style="padding-left:15px;">
-                    <div class="col-md-12">
-                        <label class="labels">Name:</label>
-                        <input type="text" name="username" class="form-control" placeholder="Enter your name" value="<?php echo "".$row['Username'];?>">
-                    </div>
-                </div>
-                <div class="row-mt-3" style="width:360px;"> 
-                    <div class="col-md-12"><label class="labels">Email</label><input type="email" name="useremail" class="form-control" placeholder="example@gmail.com" value="<?php echo $row['Email'];?>"readonly></div>
-                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" name="useraddress" class="form-control" placeholder="Enter Address 1" value="<?php echo $row["User_Address"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" name="userposcode" class="form-control" placeholder="Postcode" value="<?php echo $row["User_Poscode"];?>"></div>
-                    <div class="col-md-12"><label class="labels">State</label>
-                    <select class="col-md-12 form-control" name="userstate" onchange="getOption()">
-                      <option value="Kuala Lumpur">Kuala Lumpur</option>
-                      <option value="Selangor">Selangor</option>
-                      <option value="Melaka">Melaka</option>
-                      <option value="Negeri Sembilan">Negeri Sembilan</option>
-                      <option value="Pahang">Pahang</option>
-                      <option value="Kelantan">Kelatan</option>
-                      <option value="Terrenganu">Terrenganu</option>
-                      <option value="Penang">Penang</option>
-                      <option value="Perlis">Perlis</option>
-                      <option value="Kedah">Kedah</option>
-                      <option value="Johor">Johor</option>
-                      <option value="Perak">Perak</option>
-                      <option value="Sabah">Sabah</option>
-                      <option value="Sarawak">Sarawak</option>
-                    </select>
-                    </div>    
-                    <div class="col-md-12"><label class="labels">Phone Number</label><input type="tel" name="usertel" class="form-control" placeholder="Enter your Phone Number" value="<?php echo $row["PhoneNumber"];?>"></div>
-                    <div class="col-md-12"><label class="labels">Birthday</label><input type="date" name="userbirthday" class="form-control" placeholder="Birthday" value="<?php echo $row["Birthday"];?>"></div> 
-                </div>
-                    
-                <div>
-                <div class="mt-5 text-center"><button class="button-58" type="submit" name="savebtn">Save Changes</button></div>
-                <div class="mt-5 text-center"><a class="button-58" href="profile.php">Back</a></div>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-4">  
-        </div>
-        </form>
-    </div>
+                  <td>$sr</td>
+                  <td>$values[item_name]</td>
+                  <td>$values[item_price]<input type='hidden' class='iprice' value='$values[item_price]'></td>
+                  <td><input class='text-center iquantity' onchange='subTotal()' type='number' value='$values[item_quantity]' min='1' max='10'></td>
+                  <td class='itotal'></td>
+                  <td>
+                  <input type='hidden' name='item_name' value='$values[item_name]'>
+                  </td>
+              </tr>
+              ";
+              }
+              
+            
+            }
+            ?>
+  </table>
+ </div>  
     
 </div>
+						    </tbody>
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+    		<div class="row justify-content-end">
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Coupon Code</h3>
+    					<p>Enter your coupon code if you have one</p>
+  						<form action="#" class="info">
+	              <div class="form-group">
+	              	<label for="">Coupon code</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	            </form>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+    			</div>
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Estimate shipping and tax</h3>
+    					<p>Enter your destination to get a shipping estimate</p>
+  						<form action="#" class="info">
+	              <div class="form-group">
+	              	<label for="">Country</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	              <div class="form-group">
+	              	<label for="country">State/Province</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	              <div class="form-group">
+	              	<label for="country">Zip/Postal Code</label>
+	                <input type="text" class="form-control text-left px-3" placeholder="">
+	              </div>
+	            </form>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
+    			</div>
+    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    				<div class="cart-total mb-3">
+    					<h3>Cart Totals</h3>
+    					<p class="d-flex">
+    						<span>Subtotal</span>
+    						<span>$20.60</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Delivery</span>
+    						<span>$0.00</span>
+    					</p>
+    					<p class="d-flex">
+    						<span>Discount</span>
+    						<span>$3.00</span>
+    					</p>
+    					<hr>
+    					<p class="d-flex total-price">
+    						<span>Total</span>
+    						<span>$17.60</span>
+    					</p>
+    				</div>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+    			</div>
+    		</div>
+			</div>
+		</section>
 
+		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
+      <div class="container py-4">
+        <div class="row d-flex justify-content-center py-5">
+          <div class="col-md-6">
+          	<h2 style="font-size: 22px;" class="mb-0">Subcribe to our Newsletter</h2>
+          	<span>Get e-mail updates about our latest shops and special offers</span>
+          </div>
+          <div class="col-md-6 d-flex align-items-center">
+            <form action="#" class="subscribe-form">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control" placeholder="Enter email address">
+                <input type="submit" value="Subscribe" class="submit px-3">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
 
     
 </div>
-    <footer class="ftco-footer ftco-section">
+<footer class="ftco-footer ftco-section">
       <div class="container">
       	<div class="row">
       		<div class="mouse">
@@ -252,7 +346,7 @@ mysqli_close($connect);
               <h2 class="ftco-heading-2">Vegefoods</h2>
               <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate"><a href="https://twitter.com/?lang=en"><span class="icon-twitter"></span></a></li>
+                <li class="ftco-animate"><a href="https://twitter.com/?lang=en"><span class="icon-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="https://www.facebook.com/"><span class="icon-facebook"></span></a></li>
                 <li class="ftco-animate"><a href="https://www.instagram.com/"><span class="icon-instagram"></span></a></li>
               </ul>
@@ -310,8 +404,7 @@ mysqli_close($connect);
         </div>
       </div>
     </footer>
-    
-  
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -333,21 +426,20 @@ mysqli_close($connect);
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="index/js/google-map.js"></script>
   <script src="index/js/main.js"></script>
-  <script>
-		$(document).ready(function() {
-    // On refresh check if there are values selected
-    if (localStorage.selectVal) {
-            // Select the value stored
-        $('select').val( localStorage.selectVal );
-    }
-});
 
-// On change store the value
-$('select').on('change', function(){
-    var currentVal = $(this).val();
-    localStorage.setItem('selectVal', currentVal );
-});
-	</script>
-    
+<script>
+var iprice = document.getElementsByClassName('iprice');
+var iquantity = document.getElementsByClassName('iquantity');
+var itotal = document.getElementsByClassName('itotal');
+
+function subTotal()
+{
+    for(i=0;i<iprice.length;i++)
+    {
+      itotal[i].innerText=(iprice[i].value)*(iquantity[i].value);
+    }
+}
+subTotal();
+  </script>
   </body>
 </html>
