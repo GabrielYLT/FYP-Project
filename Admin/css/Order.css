@@ -1,0 +1,161 @@
+.order *{font-family: 'Lato', sans-serif;}
+
+.order table
+{
+	height:300px;
+	background-color:white;
+
+}
+
+
+.order #number
+{
+	width:50px;
+	text-align:center;
+}
+
+.order #order_num
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #c_id
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #p_name
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #qty
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #price
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #p_method
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #total
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #c_add
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #o_date
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #status
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #s_option
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #track
+{
+	width:150px;
+	text-align:center;
+}
+
+.order #add_order
+{
+	height:32px;
+	width:155px;
+	float:left; 
+	margin-right:25%;
+	text-align:center;
+	border:2px solid black;
+	background-color:#f4f4f4;
+	border-radius:10px;
+
+}
+
+.order #add_order:hover, #update_order:hover
+{
+	cursor: pointer;
+
+}
+
+.order #update_order
+{
+	height:32px;
+	width:155px;
+	float:right;
+	text-decoration:none;
+	text-align:center;
+	border:none;
+	background-color:#f4f4f4;
+	border-radius:10px;
+
+}
+
+.order #del_order
+{
+	height:32px;
+	width:155px;
+	float:right;
+	text-decoration:none;
+	text-align:center;
+	border: none;
+	background-color: #dd2e28;
+	border-radius:10px;
+}
+
+.order #del_order a
+{
+	color:white;
+}	
+
+.order #select
+{
+	width:100px;
+	text-align:center;
+}	
+
+.order input[type=submit]
+{
+	height:32px;
+	width:210px;
+	float:right;
+	background-color:#dd2e28;
+	color:white;
+	font-weight:bold;
+	border-style:none;
+	border-radius:10px;	
+
+
+}
+
+.order #table
+{
+	border-bottom:1px solid black;
+}	

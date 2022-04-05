@@ -1,0 +1,74 @@
+.salesreport *{font-family: 'Lato', sans-serif;}
+
+.salesreport #print_btn
+{
+	width:200px;
+	height:35px;
+	border:3px solid black;
+	background-color:#f4f4f4;
+	text-decoration:none;
+	border-radius:35px;
+
+}
+
+.salesreport #print_btn:hover
+{
+	cursor:pointer;
+}	
+
+.salesreport #no
+{
+	width:50px;
+	text-align:center;
+}
+
+.salesreport #order_id
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport #oipc
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport #shipping_fee
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport #p_processing_fees
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport #refunds_item_charges
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport #grand_total
+{
+	width:150px;
+	text-align:center;
+}
+.salesreport #pg_gateway
+{
+	width:150px;
+	text-align:center;
+}
+
+.salesreport tr:nth-child(even)
+{
+	background-color:#f4f4f4;
+}
+
+.salesreport #table
+{
+	border-bottom:1px solid black;
+}
