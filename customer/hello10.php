@@ -78,7 +78,7 @@ var confirm_password = document.getElementById("confirm_password");
 //var password_check=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z0-9])(?!.*\s).{8,15}$/;
 if(password.value != confirm_password.value)
   {
-    confirm_password.setCustomValidity("Passwords Not Match");
+    confirm_password.setCustomValidity("Passwords Don't Match");
   } 
 else 
  {
@@ -89,20 +89,21 @@ password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
 
 </script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="signup.php">JJG Fruit & Vege</a>
-          <a class="navbar-brand">Register</a>
+	      <a class="navbar-brand" href="home.html">JJG Fruit & Vege</a>
+          <a class="navbar-brand">SIGNUP</a>
 	    </div>
 	  </nav>
       <div class="container1">
 		<div class="signup-box">
 				<div style ="font-weight:bold; text-align:center; font-size:20pt;">
-					Register
+					Sign-Up
 				</div>
-				<form name="signup" method="post" action="insert.php">
+				<form name="signup" method="post">
 				
 					
 						<div class="textbox">
@@ -124,7 +125,7 @@ confirm_password.onkeyup = validatePassword;
 				<span id="errorrpwd"></span>
 				</div>
 				<div class="button">
-				<input type="submit" value="Register" name="sbtn" onclick="validate(),validate_email(),validatePassword();">
+				<input type="submit" value="Sign Up" name="sbtn" onclick="validate(),validate_email(),validatePassword();">
 				</div> 
 				</form>
 				<div style="text-align:center;">

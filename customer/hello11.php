@@ -12,26 +12,15 @@ if(isset($_POST["sbtn"]))
 
     if(mysqli_num_rows($selectrow)>0)
     {
-        ?>
-        <script>
-        alert("Sorry... Email already Taken");
-        </script>
-        <?php
-		header("refresh:0.1; url=signup.php");
+        $email_error = "Sorry... Email already Taken";
     }
     else
     {
         $sql=mysqli_query($connect,"INSERT INTO customer(Username,Email,User_Password,confirm_password)
         VALUES('$name','$email','$pas','$cpassword')");
-        ?>
-        <script type="text/javascript">
-	    alert("Register Successfully!");
-	    </script>
-
-        <?php
+        echo 'Saved!';
         header("refresh:0.1; url=login.php");
         mysqli_close($connect);
 	}
 }
-
 ?>

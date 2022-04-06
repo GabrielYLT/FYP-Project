@@ -1,0 +1,45 @@
+<?php
+if(isset($_POST["poc"]))
+{
+
+    if(isset($_SESSION["checkout"]))
+    {
+
+        $item_array_id = array_column($_SESSION["checkout"],"item_id");
+        if(!in_array($_GET["id"],$item_array_id))
+        {
+            $count = count($_SESSION["checkout"]);
+            $item_array = array(
+              'item_id' => $_GET["hid"],
+              'item_image'=>$_POST["himage"],
+              'item_name' => $_POST["hname"],
+              'item_price' => $_POST["hprice"],
+              'item_quantity' =>$_POST["hquantity"],
+              'item_price' =>$_POST["htotal"]
+            );
+            $_SESSION["checkout"][$count] = $item_array;
+        }
+        else 
+        {
+        }
+
+    }
+    else 
+    {
+        $item_array = array(
+          'item_id' => $_GET["hid"],
+          'item_image'=>$_POST["himage"],
+          'item_name' => $_POST["hname"],
+          'item_price' => $_POST["hprice"],
+          'item_quantity' =>$_POST["quantity"],
+          'item_price' =>$_POST["htotal"]
+        );
+        $_SESSION["checkout"][0] = $item_array;
+      
+
+
+    }
+
+ 
+
+}

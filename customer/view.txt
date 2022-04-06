@@ -1,0 +1,53 @@
+    <div class = "table-container">
+        <table class = "order-table">
+            <tr>
+                <th>Order ID</th>
+                <th>Customer name</th>
+                <th>Email</th>
+                <th>Product ID</th>
+                <th>Product name</th>
+                <th>Quantity</th>
+            </tr>
+    
+
+            <?php 
+                while ($row = mysqli_fetch_array($result)) {
+                    echo "<style>
+                        td {
+                            text-align: center;
+                            border: #333;
+                        }
+                        </style>";
+
+                    echo "<tr style = 'background-color: #ddd; color: #333;'>";
+                        echo "<td>".$row['Order_ID']."</td>";
+                        echo "<td>".$row['Username']."</td>";
+                        echo "<td>";
+                        echo "<a href = \"mailto:".$row['customer_email']."\">";
+                        echo $row['customer_email'];
+                        echo "</a>";
+                        echo "<td>";
+                        echo "</td>";
+                        echo"<td>".$row["Product_Image"]."</td>";
+                        echo "<td>".$row['product_id']."</td>";
+                        echo "<td>".$row['Product_Name']."</td>";
+                        echo "<td>".$row['quantity']."</td>";
+                    echo "</tr>";
+                }
+
+                mysqli_close($connect);
+            ?>
+        </table>
+        </div>
+
+        echo "<tr style = 'background-color: #ddd; color: #333;'>";
+                        echo "<td>".$row['Order_ID']."</td>";
+                        echo "<td>".$row['Username']."</td>";
+                        echo "<td>";
+                        echo "</a>";
+                        echo "<td>";
+                        echo "</td>";
+                        echo"<img src=images/<?php echo $row[Product_Image]?> width='50' height='40'/>";
+                        echo "<td>".$row['Product_Name']."</td>";
+                        echo "<td>".$row['quantity']."</td>";
+                    echo "</tr>";

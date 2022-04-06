@@ -1,49 +1,65 @@
 <?php
-session_start();
 include("dataconnection.php");
-$error="";
-
-if(isset($_GET["loginbtn"]))
+if(isset($_POST['submit_email']) && $_POST['email'])
 {
-
-    if(empty($_GET["useremail"])||empty($_GET["userpassword"]))
+  $emailId=$_POST['email'];
+  $result=mysqli_query($connect,"SELECT * FROM customer WHERE Email='".$emailId."'");
+  $row = mysqli_fetch_array($result);
+  if($row>0)
+  {
+      $pass=$row['User_Password'];
+    
+        $link="<a href='http://localhost/Final/customer/reset_password.php?key=".$emailId."&reset=".$pass."'>Click To Reset password</a>";
+        require_once('phpmail/PHPMailerAutoload.php');
+        $mail = new PHPMailer();
+        $mail->CharSet =  "utf-8";
+        $mail->IsSMTP();
+        // enable SMTP authentication
+        $mail->SMTPAuth = true;                  
+        // GMAIL username
+        $mail->Username = "tjx3879@gmail.com";
+        // GMAIL password
+        $mail->Password = "Jinxuan020111@@";
+        $mail->SMTPSecure = "ssl";  
+        // sets GMAIL as the SMTP server
+        $mail->Host = "smtp.gmail.com";
+        // set the SMTP port for the GMAIL server
+        $mail->Port = "465";
+        $mail->From='no-reply@gmail.com';
+        $mail->FromName='Vegetable-Administrators';
+        $mail->AddAddress('tjx3879@gmail.com', 'Admin');
+        $mail->Subject  =  'Reset Password';
+        $mail->IsHTML(true);
+        $mail->Body    = 'Click On This Link to Reset Password '.$link.'';
+    if($mail->Send())
     {
-        $error="Useremail or password is invalid. Please Fill in";
+      ?>
+      <script>
+       alert("Check Your Email and Click on the link sent to your email");
+       </script>
+       <?php
     }
-    else
+    else if(!$mail->Send())
     {
-        $useremail = $_GET["useremail"];
-        $upassword = $_GET["userpassword"];
-
-        $useremail = mysqli_real_escape_string($connect,$useremail);
-        $upassword = mysqli_real_escape_string($connect,$upassword);
-
-        $result = mysqli_query($connect, "SELECT * From customer WHERE Email='$useremail' AND confirm_password='$upassword'");
-
-        $count=mysqli_num_rows($result);
-
-        if($count==1)
-        {
-            $row=mysqli_fetch_assoc($result);
-            $_SESSION["id"]=$row["ID"];
-            header("location:main.php");
-        }
-        else
-        {
-            $error = "Email and password are invalid. Please try again.";
-        }
-
-
-
-
+      ?>
+      <?php
     }
+  }	
+  else
+  {
+    ?>
+    <script>
+      alert("Email Not Exist");
+      </script>
+    <?php
+  }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Login Page</title>
-    <meta charset="utf-8">
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Reset Password Page</title>
+<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
@@ -63,58 +79,63 @@ if(isset($_GET["loginbtn"]))
 
     <link rel="stylesheet" href="index/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="index/css/jquery.timepicker.css">
-    <link rel="icon" href="css/img_login/login.jpeg">
-    <link rel="stylesheet" href="css/login.css">  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/signup.css" type="text/css">
+    <script type="text/javascript"></script>
+    
     <link rel="stylesheet" href="index/css/flaticon.css">
     <link rel="stylesheet" href="index/css/icomoon.css">
     <link rel="stylesheet" href="index/css/style.css">
-  </head>
- <body>
- <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+<script>
+function validate_email()
+{
+   var v_email;
+   var email_check = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   ///^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(signup.useremail.value);
+	v_email= document.reset.email.value;
+
+	if(v_email==""||!v_email.match(email_check))
+	{
+		document.getElementById("erroremail").innerHTML="Please enter the proper email address";
+	}
+	else
+	{
+		document.getElementById("erroremail").innerHTML="";
+		email_check=1;
+	}
+}
+
+</script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 	    <div class="container">
-	      <a class="navbar-brand" href="login.php">JJG Fruit & Vege</a>
-          <a class="navbar-brand">Login</a>
+	      <a class="navbar-brand" href="reset_pass.php">JJG Fruit & Vege</a>
+          <a class="navbar-brand">Reset Password</a>
 	    </div>
 	  </nav>
-                <div class="bgc"></div>
-
-            <div id="outsideform">
-            <fieldset style="margin-top:100px;">
-            <legend>
-            <img src="css/img_login/2.png" style="width:200px; height:200px; margin-top:50px;">
-            </legend>
-
-            <div style="width:400px; padding:0px; margin:auto; border:1px #DDD";>
-
-
-              <div id="login-title">
-                <h4>
-                LOGIN
-                </h4>
-              </div>
-            <div id="loginform">
-
-              <form name="loginfrm";>
-              <p>
-              <input type="email" name="useremail" placeholder="Email"></p>
-              <p><input type="password" name="userpassword" placeholder="Password"></p>
-              <p><input type="submit" name="loginbtn" value="Login"></p>
-                <span style="color:red";><?php echo $error;?></span>
-              <p style="color:black;"><a href="reset_pass.php">Forgot Your Password?</a></p>
-              <p style="color:black;"><a href="signup.php">Register</a></p>
-              </div>
-            </div>
-</form>
-            </div>		
-
-
-            </fieldset>
-
+      <div class="container1">
+		<div class="signup-box">
+    <form method="post" name="reset">
+      <?php $result ?>
+      <div class="textbox">
+				<input type="email"  name="email" placeholder="Email" required>
+				<span id="erroremail" style="color:red;"></span>
+        
+				</div>
+        <div class="button">
+				<input type="submit" value="Send Link to Reset Password" name="submit_email" onclick="validate_email()">
+				</div> 
+        <div class="button">
+				<a href="Login.php" value="Back To Login">Back To Login</a>
+				</div> 
+    </form>
+		</div>
+	</div>
         <footer class="ftco-footer ftco-section">
       <div class="container">
       	<div class="row">
@@ -153,5 +174,6 @@ if(isset($_GET["loginbtn"]))
   
   <script src="index/js/main.js"></script>
     
-  </body>
+</html>
+</body>
 </html>
