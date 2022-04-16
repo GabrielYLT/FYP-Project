@@ -1,0 +1,105 @@
+.addprod *{font-family:'Lato', sans-serif;}
+
+.addprod #title{
+	width:300px;
+	margin:auto;
+	text-align:center;}
+
+.addprod #form
+{
+	padding:30px;
+}
+
+.addprod input[type=text]
+{
+	height:25px;
+	border-style:none;
+	border-radius:5px;
+	background-color:#f4f4f4;
+}
+
+.addprod #category_select
+{
+	width:300px;
+	height:25px;
+	border-style:none;
+	border-radius:5px;
+	background-color:#f4f4f4;
+	
+}
+
+.addprod input[type=file]:hover
+{
+	background-color:#e4e4e5;
+}
+
+.addprod textarea
+{
+	border-style:none;
+	border-radius:5px;
+	background-color:#f4f4f4;
+}
+
+.addprod input[type=number]
+{
+	height:25px;
+	width:80px;
+	border-style:none;
+	border-radius:5px;
+	background-color:#f4f4f4;
+}
+
+
+
+.addprod .box
+{
+	background-color:white;
+	border-style:none;
+	border-radius:25px;
+	width:1200px;
+	margin:auto;
+}
+
+.addprod input[type=reset]
+{
+	height:32px;
+	width:155px;
+	background-color:#f4f4f4;
+	color:black;
+	border-style:none;
+	border-radius:10px;	
+}
+
+.addprod input[type=submit]
+{
+	height:32px;
+	width:155px;
+	background-color:#3e6ae1;
+	color:white;
+	font-size:15px;
+	border-style:none;
+	border-radius:10px;
+}
+
+.addprod #add_btn
+{
+	float:left;
+	cursor:pointer;
+}
+
+.addprod #add_btn:hover
+{
+	cursor:pointer;
+}
+
+.addprod #clear_btn
+{
+	float:right;
+	border:2px solid black;
+
+}
+
+.addprod #clear_btn:hover
+{
+	cursor:pointer;
+}

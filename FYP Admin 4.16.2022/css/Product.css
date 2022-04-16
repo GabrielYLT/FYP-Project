@@ -1,0 +1,127 @@
+.product *{font-family:'Lato', sans-serif;}
+
+.product table
+{
+	height:400px;
+	background-color:white;
+}
+.product #no
+{
+	width:50px;
+	text-align:center;
+}
+
+
+.product #p_name
+{
+	width:200px;
+	text-align:center;
+}
+
+.product #p_cat
+{
+	width:200px;
+	text-align:center;
+}
+
+.product #p_price
+{
+	width:200px;
+	text-align:center;
+}
+
+.product #p_disprice
+{
+	width:130px;
+	text-align: center;
+}
+
+.product #p_instock
+{
+	width:100px;
+	text-align:center;
+}
+
+.product #p_sold
+{
+	width:100px;
+	text-align:center;
+}
+
+.product #p_status
+{
+	width:100px;
+	text-align:center;
+}
+
+.product #p_date
+{
+	width:200px;
+	text-align:center;
+}
+
+.product #add_btn
+{
+	height:32px;
+	width:155px;
+	float:left; 
+	margin-right:25%;
+	text-align:center;
+	border:2px solid black;
+	background-color:#f4f4f4;
+	border-radius:10px;
+}
+
+.product #updt_btn
+{
+	height:32px;
+	width:155px;
+	float:left;
+	text-decoration:none;
+	text-align:center;
+	border:2px solid black;
+	background-color:#f4f4f4;
+	border-radius:10px;
+}
+
+.product #del_btn
+{	
+	height:32px;
+	width:155px;
+	float:right;
+	text-decoration:none;
+	text-align:center;
+	border:2px solid black;
+	background-color:#f4f4f4;
+	border-radius:10px;
+}
+
+.product td
+{
+	height:50px;
+}
+
+.product #select
+{
+	width:90px;
+	text-align:center;
+}	
+
+.product input[type=submit]
+{
+	height:32px;
+	width:210px;
+	float:right;
+	background-color:#dd2e28;
+	color:white;
+	font-weight:bold;
+	border-style:none;
+	border-radius:10px;	
+
+
+}
+
+.product #table
+{
+	border-bottom: 1px solid black;
+}	
