@@ -27,7 +27,7 @@ if(isset($_POST["sbtn"]))
 	$productstock = $_POST["pstock"];
 	$productStatus = $_POST["status"];
 	$productDesc = $_POST["pdesc"];
-	$dateAdded = $_POST["dateAdded"];
+	$dateAdded = date("Y-m-d");
 
 
 	$sql=mysqli_query($connect,"INSERT INTO product(Product_Name,Product_Image,Product_Price,Product_Stock,Product_Status,Product_Description,Admin_ID,dateAdded) 
@@ -47,7 +47,7 @@ if(isset($_POST["sbtn"]))
 
 ?>
 		<script type="text/javascript">
-		alert("Update Successfully!");
+		alert("Added Successfully!");
 		
 		</script>
 		
@@ -193,7 +193,7 @@ body {
 									<img class="rounded-circle mt-5" width="475px" src="images/Placeholder.png" name="displayImage" id="dislayImage" required />
 									<div class="custom-file mt-3 mb-3">
 									<input type="file" name="profileImage" id="fileInput" style="display:none" id="profileImage" >
-									<input class="btn btn-primary d-block mx-xl-auto" type="button" name="profileImage" value="Upload Profile Image" onclick="document.getElementById('fileInput').click();" required />
+									<input class="btn btn-primary d-block mx-xl-auto" type="button" name="profileImage" value="Upload Product Image" onclick="document.getElementById('fileInput').click();" required />
 									</div>
 								</div>
                                 <div class="form-group">
@@ -225,12 +225,6 @@ body {
                                 <div class="form-group">
                                     <label for="password2">Product Description </label>
                                     <textarea placeholder="Description" id="pdesc" name="pdesc" cols="60" rows="4" name="pdesc" class="form-control validate"  required></textarea>
-								</div>
-									
-                                
-								<div class="select">
-								<label for="dateAdded">Date Added :</label>
-								<input type="date" name="dateAdded" id="dateAdded" class="form-control validate" required>
 								</div>
 								<hr>
                                 <div class="row">

@@ -215,7 +215,7 @@ body {
 									<div class="custom-file">
 									<input type="file" name="profileImage" id="fileInput" style="display:none" id="profileImage" >
 									<input class="btn btn-default d-block mx-xl-auto" type="button" name="profileImage" value="Upload Image" onclick="document.getElementById('fileInput').click();" />
-									<button class="btn btn-info d-block mx-xl-auto" type="submit" name="upload" style="margin-top:10px">Save Profile Image</button>
+									<button class="btn btn-info d-block mx-xl-auto" type="submit" name="upload" style="margin-top:10px">Save Product Image</button>
 									<br>
 									<span style='color: red;margin-left:33%;'> <?php echo $error; ?> </span><hr>
 									<br>
@@ -253,9 +253,9 @@ body {
                                     <label for="Added by">Added By :   &nbsp;	</label>
                                     <input value="<?php echo $row1['Admin_Name']?>" type="text" name="AdminName" class="form-control validate" readonly>
                                 </div>
-								<div class="select">
+								<div class="form-group">
 								<label  for="dateAdded">Date Added :</label>
-								<input value="<?php echo $row['dateAdded']?>" type="date" name="dateAdded" id="dateAdded" class="form-control validate" required>
+								<input value="<?php echo $row['dateAdded']?>" type="date" name="dateAdded" id="dateAdded" class="form-control validate" readonly>
 								</div>
 								<hr>
                                 </div>
