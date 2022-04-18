@@ -63,6 +63,13 @@ if($_POST['password'] === $_POST["password2"]){
 $select = mysqli_query($connect, "SELECT * FROM addadmin WHERE Admin_Email = '".$_POST['email']."'");
 if(mysqli_num_rows($select)) {
     $error="This email address is already registered";
+	?>
+		<script type="text/javascript">
+		alert("Email Already In Use!");
+		
+		</script>
+		
+	<?php 
 }else{
 	 
 	mysqli_query($connect,"INSERT INTO addadmin(Admin_Name,Admin_Email,Admin_Password,Admin_CPassword,Admin_PhoneNo,Admin_Gender,Admin_Image)VALUES('$Admin_Name','$Admin_Email','$Admin_Password','$Admin_CPassword','$Admin_PhoneNo','$Admin_Gender','$Admin_Image')");
@@ -259,8 +266,9 @@ body {
 									</div>
 								</div>
                                 <div class="form-group">
+                                <div class="form-group">
                                     <label for="name">Username </label>
-                                    <input placeholder="Enter Your Username Here" name="name" type="text" class="form-control validate" required >
+                                    <input placeholder="Enter Your NRIC Name Here" name="name" type="text" class="form-control validate" pattern="[a-zA-Z'-'\s]*" title="Please Enter Your NRIC Name , no letter or symbols accepted !" required >
 									
 									<span id="errorname"></span>
                                 </div>

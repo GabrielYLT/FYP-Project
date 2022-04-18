@@ -228,7 +228,7 @@ body {
                                     ?>
                                     <td>
 									<div class='btn-group'> 
-									<a href="ViewDetails.php?details&id=<?php echo $row['Product_ID'];?>" class="btn btn-info">View Details</a>
+									<a href="ViewDetails.php?details&id=<?php echo $row['Product_ID'];?>" class="btn btn-info">More Details</a>
 									<a href="ViewProduct.php?del&id=<?php echo $row['Product_ID'];?>" class="btn btn-danger" onclick="return confirmation()" >Delete</a></td>
 									</div>
 

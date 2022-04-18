@@ -35,7 +35,17 @@ $msg ="";
 $css_class = "";
 if(isset($_POST["upload"]))
 {
+	if(empty($_FILES['profileImage']['name']))
+	{
+		?>
+		<script type="text/javascript">
+		alert("No Image Uploaded!");
+		
+		</script>	
+		<?php 
+		 header("refresh:0.1");
 
+}else{
 	echo "<pre>", print_r($_FILES['profileImage']['name']), "</pre>";	
     $product_image = time() . '_' . $_FILES['profileImage']['name'];
 	
@@ -54,6 +64,7 @@ if(isset($_POST["upload"]))
         }
 
         header("refresh:0.1");
+}
 }
 ?>
 <?php

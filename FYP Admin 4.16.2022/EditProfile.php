@@ -33,6 +33,17 @@ $msg ="";
 $css_class = "";
 if(isset($_POST["upload"]))
 {
+	if(empty($_FILES['profileImage']['name']))
+	{
+		?>
+		<script type="text/javascript">
+		alert("No Image Uploaded!");
+		
+		</script>	
+		<?php 
+		 header("refresh:0.1");
+
+}else{
 	echo "<pre>", print_r($_FILES['profileImage']['name']), "</pre>";	
     $admin_image = time() . '_' . $_FILES['profileImage']['name'];
 	
@@ -52,6 +63,7 @@ if(isset($_POST["upload"]))
 
         header("refresh:0.1");
 	
+}
 }
 ?>
 <?php
@@ -246,7 +258,7 @@ body {
 								</div>
                                 <div class="form-group">
                                     <label for="name">Username </label>
-                                    <input value="<?php echo $row['Admin_Name']?>" placeholder="Enter Your Username Here" name="name" type="text" class="form-control" required >
+                                    <input value="<?php echo $row['Admin_Name']?>" placeholder="Enter Your Username Here" name="name" type="text" class="form-control" pattern="[a-zA-Z'-'\s]*" title="Please Enter Your NRIC Name , no letter or symbols accepted !"  required >
 									 
 									<span id="errorname"></span>
                                 </div>
