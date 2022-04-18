@@ -15,17 +15,16 @@ if(!isset($_SESSION['id']))
     //exit();
 }
 $Admin_id=$_SESSION['id'];
-$result=mysqli_query($connect,"SELECT *FROM addadmin WHERE Admin_ID='$Admin_id'");
+$result=mysqli_query($connect,"SELECT * FROM addadmin WHERE Admin_ID='$Admin_id'");
 $row = mysqli_fetch_assoc($result);
 
 if(isset($_GET["details"]))
 {
 	$order_id=$_GET['id'];
-	$result1=mysqli_query($connect,"SELECT customer_order.Order_ID,customer_order.customer_id,customer.Username,customer_order.product_id,product.Product_Name,product.Product_Image,customer_order.quantity,customer_order.order_date,customer_order.payment_id,
-													payment.payment_name,payment.payment_state,payment.payment_address,payment.payment_postcode,payment.payment_phone,payment.payment_email,payment.payment_method,customer_order.payment_price,customer_order.Order_Status,customer_order.Payment_Status FROM(((customer_order INNER JOIN customer ON customer_order.customer_id = customer.ID)
-													INNER JOIN product ON customer_order.product_id = product.Product_ID)INNER JOIN payment ON customer_order.payment_id = payment.payment_id)");	
-										  $row1=mysqli_fetch_assoc($result1);
-	$result=mysqli_query($connect,"SELECT * from customer_order WHERE Order_ID='$order_id'");									  
+	$result1=mysqli_query($connect,"SELECT * ,customer_order.product_id,product.Product_Name FROM(customer_order INNER JOIN product ON customer_order.product_id = product.Product_ID)WHERE payment_id='$order_id'");	
+	$result2=mysqli_query($connect,"SELECT *FROM customer_order WHERE payment_id='$order_id'");	
+    $row2=mysqli_fetch_assoc($result2);	
+	$result=mysqli_query($connect,"SELECT * from payment WHERE payment_id='$order_id'");									  
 	$row=mysqli_fetch_assoc($result);
 }
 ?>
@@ -40,7 +39,7 @@ if(isset($_POST["sbtn"]))
 		{
 			mysqli_query($connect,"UPDATE customer_order SET Payment_Status ='Paid',
                                                Order_Status='$status'
-                                               WHERE Order_ID= '$order_id'");
+                                               WHERE payment_id= '$order_id'");
 		?>
 		<script type="text/javascript">
 		alert("Updated Successfully!");
@@ -53,7 +52,7 @@ if(isset($_POST["sbtn"]))
 		{
 		mysqli_query($connect,"UPDATE customer_order SET Payment_Status ='Unpaid',
                                                Order_Status='$status'
-                                               WHERE Order_ID= '$order_id'");
+                                               WHERE payment_id= '$order_id'");
 		?>
 		<script type="text/javascript">
 		alert("Added Successfully!");
@@ -67,7 +66,7 @@ if(isset($_POST["sbtn"]))
 		$status = $_POST["status"];
 		mysqli_query($connect,"UPDATE customer_order SET Payment_Status ='Paid',
                                                Order_Status='$status'
-                                               WHERE Order_ID= '$order_id'");
+                                               WHERE payment_id= '$order_id'");
 		?>
 		<script type="text/javascript">
 		alert("Added Successfully!");
@@ -204,71 +203,84 @@ body {
                     <div class="row">
                         <div class="col-12">
                             <form name = "updatAdmin" method="post" class="tm-signup-form" enctype="multipart/form-data" >
-                                <div class="form-group">
-                                    <label for="name">Order ID</label>
-                                    <input value="#<?php echo $row['Order_ID']?>"  type="text" class="form-control" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Customer Name </label>
-                                    <input value="<?php echo $row1['Username']?>"  type="text" class="form-control" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="phone">Product Name  &nbsp;	</label>
-                                    <input value="<?php echo $row1['Product_Name']?>"  type="text" class="form-control" readonly>
-                                </div>
-								<div class="form-group">
-									<label for="Image">Product Image</label>
-									<div class="d-flex flex-column align-items-center text-center p-3 py-5">
-									<img class="rounded-circle" width="270px" img src="images/<?php echo $row1['Product_Image'] ?>"/>
-									</div>
-								</div>
-								<div class="form-group">
-                                    <label for="phone">Quantity &nbsp;	</label>
-                                    <input value="<?php echo $row['quantity']?>"  type="text" class="form-control" readonly>
-                                </div>
-								<div class="form-group">
-								<div class="select">Order Confirmed On : </label>
-								<input value="<?php echo $row['order_date']?>" type="date"  id="dateAdded" class="form-control validate" readonly>
-								</div>
-								</div>
+<div style="background-color:#D0F0C0; border-radius:30px; padding:50px; width:600px;margin-left:-14%;">
+<div style="margin-left:auto; ">
+<div style="width:500px; height:auto%;">
+<table class="table">	
+
+<tr class="tm-bg-gray">
+	<th scope="col" >Product Name </th>
+	<th scope="col">Quantity</th>
+	<th scope="col">Price </th>
+	<th scope="col">&nbsp;</th>
+</tr>
+<tbody id="myTable">
+                                	<?php
+									if ($result1->num_rows > 0) {
+									$subtotal=0;
+									while($row1 = $result1->fetch_assoc()) {
+									$subtotal+= $row1["payment_price"];
+									echo "<tr><td>" . $row1["Product_Name"].  "</td>" ; ;
+									echo "<td>" . $row1["quantity"]. "</td>" ;
+									echo "<td>" . $row1["payment_price"]. "</td>" ;
+									$_SESSION['subtotal']=$subtotal;
+                                    ?>
+                                    <td>
+									
+                                    <?php
+									echo "</tr>" ;
+									}
+									echo "</table>";
+									} else { echo "0 results"; } $subtotal = $_SESSION['subtotal'];
+									?>    
+									<?php echo "<hr><h5 style='margin-left:5%;margin-top:auto;color:black;'> Total :&nbsp;&nbsp;&nbsp;&nbsp;RM   $subtotal </h5>" ?>
+                                </tbody>
+</table>	
+</div>
+</div>
+</div>
+<hr>
+								
 								<div class="form-group">
                                     <label for="phone">Payment By： &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_name']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_name']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
                                     <label for="phone">State  &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_state']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_state']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
                                     <label for="phone">Address &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_address']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_address']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
                                     <label for="phone">Postcode &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_postcode']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_postcode']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">Phone Number  &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_phone']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_phone']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
                                     <label for="phone">Email  &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_email']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_email']?>"  type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
                                     <label for="phone">Payment Method  &nbsp;	</label>
-                                    <input value="<?php echo $row1['payment_method']?>" name="methd" id="methd" type="text" class="form-control" readonly>
-                                </div>
-								<div class="form-group">Total Price  &nbsp;	</label>
-                                    <input value="RM<?php echo $row['payment_price']?>"  type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row['payment_method']?>" name="methd" id="methd" type="text" class="form-control" readonly>
                                 </div>
 								<div class="form-group">
+								<div class="select">Order Confirmed On : </label>
+								<input value="<?php echo $row2['order_date']?>" type="date"  id="dateAdded" class="form-control validate" readonly>
+								</div>
+								</div>
+								<div class="form-group">
                                     <label for="phone">Payment Status  &nbsp;	</label>
-                                    <input value="<?php echo $row['Payment_Status']?>" id="methd" type="text" class="form-control" readonly>
+                                    <input value="<?php echo $row2['Payment_Status']?>" id="methd" type="text" class="form-control" readonly>
                                 </div>
 								<hr>
 								<div class="select">Delivery Status &nbsp; </label>
 									<select class="form-control selectList" style="width:100%;Height:50%;" name="status" id="status" required>
-									<option value="<?php echo $row['Order_Status']?>"><?php echo $row['Order_Status']?></option>
+									<option value="<?php echo $row2['Order_Status']?>"><?php echo $row2['Order_Status']?></option>
 									<optgroup label="Status">
 									<option value="Pending" class="text-secondary">Pending</option>
 									<option value="Preparing" class="text-info">Preparing</option>

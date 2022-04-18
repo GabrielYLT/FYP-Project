@@ -156,23 +156,21 @@ body {
 <div style="background-color:white; border-radius:30px; padding:50px; width:1425px;">
 <div style="margin:auto; ">
 <div style="width: 1325px; height: auto%;overflow-x:scroll;overflow-y:scroll;">
-<table class="table" style="width:125%">	
+<table class="table" style="width:100%">	
 <h3>View Order List </h3> 
 <hr>
 <h6 style="margin-left:auto%;margin-top:auto%;"class="text-white text-capitalize ps-3"><input style="width:15%;height:35px;margin-left:auto%;" id="myInput" type="text" name="searchname" placeholder="Search Order " ></h6>
 <hr>
 <br>
 <tr class="tm-bg-gray">
-	<th scope="col">Order No.</th>
-	<th scope="col">Customer Name</th>
-	<th scope="col">Product Name </th>
-	<th scope="col">Quantity</th>
-	<th scope="col" style="width:12%">Order Confirm On</th>
-	<th scope="col" style="width:12%">Payment Method </th>
-	<th scope="col">Total </th>
-	<th scope="col">Payment Status</th>
-	<th scope="col">Status</th>
-	<th scope="col">&nbsp;</th>
+
+	<th scope="col"style="width:15%">Customer Name</th>
+	<th scope="col" style="width:20%">Payment Method </th>
+	<th scope="col" style="width:17%">Order Confirm On</th>
+	<th scope="col" style="width:10%">Total </th>
+	<th scope="col" style="width:15%">Payment Status</th>
+	<th scope="col" style="width:18%">Status</th>
+	<th scope="col">More Details</th>
 
 
 </tr>
@@ -184,31 +182,29 @@ body {
 									die("Connection failed: " . $conn->connect_error);
 									}
 									$sql = "SELECT customer_order.Order_ID,customer_order.customer_id,customer.Username,customer_order.product_id,product.Product_Name,product.Product_Image,customer_order.quantity,customer_order.order_date,customer_order.payment_id,
-													payment.payment_name,payment.payment_state,payment.payment_address,payment.payment_postcode,payment.payment_phone,payment.payment_email,payment.payment_method,customer_order.payment_price,customer_order.Order_Status,customer_order.Payment_Status FROM(((customer_order INNER JOIN customer ON customer_order.customer_id = customer.ID)
-													INNER JOIN product ON customer_order.product_id = product.Product_ID)INNER JOIN payment ON customer_order.payment_id = payment.payment_id)";
+													payment.payment_name,payment.payment_state,payment.payment_address,payment.payment_postcode,payment.payment_phone,payment.payment_email,payment.payment_method,SUM(customer_order.payment_price) AS calc_subtotal,customer_order.Order_Status,
+													customer_order.Payment_Status FROM(((customer_order INNER JOIN customer ON customer_order.customer_id = customer.ID)
+													INNER JOIN product ON customer_order.product_id = product.Product_ID)INNER JOIN payment ON customer_order.payment_id = payment.payment_id) group BY payment_id DESC";
 									$result = $conn->query($sql);
+									
 									if ($result->num_rows > 0) {
-
 									while($row = $result->fetch_assoc()) {
-									echo "<td>#" . $row["Order_ID"] . "</td>" ;
-									echo "<td>" . $row["Username"].  "</td>" ; 
-									echo "<td>" . $row["Product_Name"]. "</td>" ;
-									echo "<td>" . $row["quantity"]. "</td>" ;
+									echo "<tr><td>" . $row["Username"] . "</td>" ;
+									echo "<td>" . $row["payment_method"]. "</td>" ;
 									echo "<td>" . $row["order_date"]. "</td>" ;
-									echo "<td>" . $row["payment_method"]. "</td>" ;	
-									echo "<td>RM" . $row["payment_price"]. "</td>" ;
+									echo "<td>RM". $row["calc_subtotal"]. "</td>" ;
 									echo "<td>" . $row["Payment_Status"]. "</td>" ;
 									echo "<td>" . $row["Order_Status"]. "</td>" ;
                                     ?>
                                     <td>
 									<div class='btn-group'> 
-									<a href="ViewOrderDetails.php?details&id=<?php echo $row['Order_ID'];?>" class="btn btn-info">View Details</a></td>
+									<a href="ViewOrderDetails.php?details&id=<?php echo $row['payment_id'];?>" class="btn btn-info">More Details</a></td>
 									</div>
                                     <?php
 									echo "</tr>" ;
 									}
 									echo "</table>";
-									} else { echo "0 results"; }
+									} else { echo "0 results"; } 
 									?>    
                                 </tbody>
 </table>	
